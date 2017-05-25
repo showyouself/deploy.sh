@@ -19,8 +19,8 @@ loop_process        用于打印进程条
 脚本参数：
 NOW_PATH            当前脚本的路径
 本地参数：
-TAGS_PATH           1、svn地址;2、git时通常在含有.git文件夹的目录中使用本脚本，填'./'即可
-ENV                 被环境，例如：run，test，dev
+TAGS_PATH           1、svn、git服务器地址
+ENV                 发布环境，例如：run，test，dev
 TAG                 发布的tag名称
 BUSINESS            被发布的服务器，通过此项确定ip即登录用户
 TOOL                TOOL，使用的是git还是svn
