@@ -1,11 +1,11 @@
-#!/bin/bash
+#! /bin/bash
 #发布脚本
 
 #脚本参数
 NOW_PATH=$(pwd)
 
 #本地参数
-TAGS_PATH="./"
+TAGS_PATH="git@github.com:showyouself/torrent.git"
 ENV=""
 TAG=""
 BUSINESS=""
@@ -17,6 +17,8 @@ REMOTE_ACCOUNT=""
 REMOTE_PATH=""
 HTTP_SERVER_ACCOUNT="www"
 
+prefix="============";
+aftfix="============>>>";
 usage()
 {
 	echo "usage: -e <test|run> -b <domain1|domain2> -v <v0.1> -p <file://..> -t <svn|git>";
@@ -70,16 +72,21 @@ do_deploy()
 	DATE=$(date '+%Y%m%d%H%M%S')
 	tmpPath=$TAG"_"$DATE
 	case "$TOOL" in
-		svn) svn export $TAGS_PATH/$TAG $tmpPath > /dev/null &;;
+		svn) svn export $TAGS_PATH/$TAG $tmpPath > /dev/null &
+			loop_process "svn check out from $TAGS_PATH/$TAG"
+			;;
 		git)
-			cd $TAGS_PATH ;
 			mkdir -p $tmpPath;
-			tmpTar=$tmpPath".tar.gz";
-			git archive --format=tar $TAG | gzip > $tmpTar;
-			tar zxvf $tmpPath".tar.gz" -C $tmpPath > /dev/null &;;
+			cd $tmpPath;
+			git init;
+			git remote add dep $TAGS_PATH;
+			git pull dep &
+			loop_process $prefix"git check out from $TAGS_PATH/$TAG"$aftfix;
+			git checkout $TAG;
+			rm ./git -rf;
+			;;
 		*) usage "Please use svn or git to deploy";;
 	esac;
-	loop_process "check out"
 	cd $NOW_PATH
 
 	#用户自修改
@@ -94,17 +101,17 @@ do_deploy()
 	#确认发布
 	last_check
 
-	read -n1 -p "Please confirm these release documents, deploy now? [Y|N]" -s answer
+	read -n1 -p $prefix"Please confirm these release documents, deploy now? [Y|N]"$aftfix -s answer
 	case "$answer" in
 		Y|y)post_depoly; return 0;;
-		*) echo ; return 1;;
+		*) echo ; return -1;;
 	esac;
 }
 
 last_check()
 {
 	echo;
-	echo "deploy list::"
+	echo $prefix"deploy list::"$aftfix
 	echo $TAGS_PATH|gawk '{printf "%-17s => %-s\n","tag路径",$1}';
 	echo $TAG|gawk '{printf "%-19s => %-s\n","tag",$1}';
 	echo $ENV|gawk '{printf "%-15s => %-s\n","发布环境",$1}';
@@ -120,7 +127,7 @@ last_check()
 post_depoly()
 {       
 	echo;
-	echo "post to remove service";
+	echo $prefix"post to remove service"$aftfix;
 	ssh $REMOTE_ACCOUNT@$REMOTE_IP "mkdir -p $REMOTE_PATH"
 	scp $PACKAGE $REMOTE_ACCOUNT@$REMOTE_IP:$REMOTE_PATH/$PACKAGE 
 	ssh $REMOTE_ACCOUNT@$REMOTE_IP "cd $REMOTE_PATH; tar zxvf $PACKAGE --strip-components 1 >> /dev/null &"
@@ -135,7 +142,7 @@ modify_deploy()
 {       
 	#[修改]根据不同框架进行修改
 	echo;
-	echo "User-defined changes:"
+	echo $prefix"User-defined changes:"$aftfix;
 	mkdir -p $tmpPath/app/Common/Conf/
 	rm $tmpPath/deploy.sh
 	cp app/Common/Conf/config.php $tmpPath/app/Common/Conf/config.php
@@ -148,7 +155,7 @@ modify_deploy()
 loop_process()
 {
 	echo;
-	echo -e $1"\c";
+	echo $1;
 	while [ 1 ]
 	do
 		job=$(jobs | gawk '!/Running/{print 0}')
@@ -156,7 +163,7 @@ loop_process()
 		then
 			break;
 		fi
-		echo -e $job"..\c"
+		echo -e "..\c";
 		sleep 0.5
 	done
 	echo;
