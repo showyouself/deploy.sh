@@ -152,7 +152,6 @@ loop_process()
 	while [ 1 ]
 	do
 		job=$(jobs | gawk '!/Running/{print 0}')
-#if [ -z $job ] || [ "$job" == "0" ];
 		if [ "$job" == "0" ];
 		then
 			break;
