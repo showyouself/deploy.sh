@@ -83,7 +83,7 @@ do_deploy()
 			git pull dep &
 			loop_process $prefix"git check out from $TAGS_PATH/$TAG"$aftfix;
 			git checkout $TAG;
-			rm ./git -rf;
+			rm .git -rf;
 			;;
 		*) usage "Please use svn or git to deploy";;
 	esac;
@@ -149,6 +149,7 @@ modify_deploy()
 	cp ThinkPHP/Library/Org/WeiXin/EncryptUtil.class.php $tmpPath/ThinkPHP/Library/Org/WeiXin/EncryptUtil.class.php
 	cp app/Common/Common/function.php.run $tmpPath/app/Common/Common/function.php
 	mv $tmpPath/index.php.run $tmpPath/index.php
+	rm $tmpPath/index.php.*
 }
 
 
