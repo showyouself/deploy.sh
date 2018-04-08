@@ -1,0 +1,16 @@
+{
+    "name": "zbin/php-deamon",
+    "description":"支持git，svn版本控制的发布脚本",
+    "type":"library",
+    "keywords" : ["git", "svn", "发布", "发布脚本", "ssh", "linux", "shell"],
+    "homepage": "https://github.com/showyouself/deploy.sh",
+    "time" : "2018-04-08",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zengbin",
+            "email": "200854748@qq.com",
+            "homepage" : "https://github.com/showyouself"
+        }
+    ]
+}
