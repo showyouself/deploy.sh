@@ -39,6 +39,8 @@ REMOTE_PATH         目标服务器文件路径
 HTTP_SERVER_ACCOUNT nginx、apache用户账户，设置相应的文件权限
 ```
 ## 三、使用方法
+### 快速安装
+composer require zbin/deploy
 ### 1 . 在脚本中配置必要的参数
 * TAGS_PATH 、TOOL：这两个参数用于确定使用svn还是git,以及版本库服务器的地址
 * REMOTE_IP、REMOTE_PATH、HTTP_SERVER_ACCOUNT：在set_remote_server和set_remote_path中根据不同的运行环境、不同的域名去配置对应的服务器ip、文件路径、登录账户。
