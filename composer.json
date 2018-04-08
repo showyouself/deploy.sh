@@ -1,5 +1,5 @@
 {
-    "name": "zbin/php-deamon",
+    "name": "zbin/deploy",
     "description":"支持git，svn版本控制的发布脚本",
     "type":"library",
     "keywords" : ["git", "svn", "发布", "发布脚本", "ssh", "linux", "shell"],
